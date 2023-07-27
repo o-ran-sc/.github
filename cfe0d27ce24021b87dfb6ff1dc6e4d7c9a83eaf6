@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c199f7b8_2c4bf164",
+        "filename": ".github/workflows/gerrit-verify.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2023-07-27T02:41:29Z",
+      "side": 1,
+      "message": "any reason you are using hash tag insted of the v0.4?",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 88
+      },
+      "revId": "cfe0d27ce24021b87dfb6ff1dc6e4d7c9a83eaf6",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
