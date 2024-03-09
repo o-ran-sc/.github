@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe8a111_6f97343f",
+        "filename": ".github/workflows/gerrit-verify.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-03-09T15:17:53Z",
+      "side": 1,
+      "message": "You need a yamllint line to disable long-line errors here.",
+      "revId": "07ee40054fa708c14aa5428d57ce6f719744bc30",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
