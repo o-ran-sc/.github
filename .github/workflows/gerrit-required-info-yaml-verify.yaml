@@ -46,6 +46,12 @@ on:
         description: "The target GitHub repository needing the required workflow"
         required: true
         type: string
+
+concurrency:
+  # yamllint disable-line rule:line-length
+  group: required-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_BRANCH }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   call-gerrit-required-info-yaml-verify:
     # yamllint disable-line rule:line-length
