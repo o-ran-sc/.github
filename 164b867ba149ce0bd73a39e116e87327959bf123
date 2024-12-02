@@ -16,6 +16,24 @@
       "message": "Seems pre-commit auto-update doesn\u0027t respect pins to commit hash values. I\u0027ve cleaned up its output and re-submitted this change.",
       "revId": "164b867ba149ce0bd73a39e116e87327959bf123",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac3987f1_91b42e4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-12-02T16:06:41Z",
+      "side": 1,
+      "message": "`pre-commit autoupdate --freeze` is the magic syntax to get frozen commit hashes from it along with a comment for what the tag is",
+      "parentUuid": "d5779c84_17be6ff8",
+      "revId": "164b867ba149ce0bd73a39e116e87327959bf123",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
