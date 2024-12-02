@@ -1,0 +1,9 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Verified+1: o-ran-sc release <collab-it+o-ran-sc-release@linuxfoundation.org>
+Code-Review+2: Andrew Grimberg <agrimberg@linuxfoundation.org>
+Code-Review+1: Alex Stancu <alexandru.stancu@highstreet-technologies.com>
+Submitted-by: Andrew Grimberg <agrimberg@linuxfoundation.org>
+Submitted-at: Mon, 02 Dec 2024 16:06:43 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/.github/+/13793
+Project: .github
+Branch: refs/heads/main
