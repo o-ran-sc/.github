@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5779c84_17be6ff8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001777
+      },
+      "writtenOn": "2024-12-02T13:59:02Z",
+      "side": 1,
+      "message": "Seems pre-commit auto-update doesn\u0027t respect pins to commit hash values. I\u0027ve cleaned up its output and re-submitted this change.",
+      "revId": "164b867ba149ce0bd73a39e116e87327959bf123",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
