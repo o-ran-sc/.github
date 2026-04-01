@@ -1,5 +1,5 @@
 ---
-name: Call Gerrit Required INFO Yaml Verify
+name: Gerrit Required Merge
 
 # yamllint disable-line rule:truthy
 on:
@@ -49,13 +49,32 @@ on:
 
 concurrency:
   # yamllint disable-line rule:line-length
-  group: required-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_BRANCH }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
+  group: required-merge-${{ github.workflow }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  call-gerrit-required-info-yaml-verify:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify job start
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/gerrit-review-action@b26a98041c59f9a877048c320313ab13bcc19aae  # v1.0.1
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
+          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: clear
+          comment-only: true
+      - name: Allow replication
+        run: sleep 10s
+
+  call-gerrit-rtdv3-merge:
+    needs: notify
     # yamllint disable-line rule:line-length
-    uses: lfit/releng-reusable-workflows/.github/workflows/gerrit-required-info-yaml-verify.yaml@37bbdea5cca2f21e502f7ff580306c78307d1d41  # v0.3.1
+    uses: lfit/releng-reusable-workflows/.github/workflows/gerrit-compose-required-rtdv3-merge.yaml@37bbdea5cca2f21e502f7ff580306c78307d1d41  # v0.3.1
     with:
       GERRIT_BRANCH: ${{ inputs.GERRIT_BRANCH }}
       GERRIT_CHANGE_ID: ${{ inputs.GERRIT_CHANGE_ID }}
@@ -68,4 +87,25 @@ jobs:
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
       TARGET_REPO: ${{ inputs.TARGET_REPO }}
     secrets:
-      GERRIT_SSH_REQUIRED_PRIVKEY: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+      RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
+
+  report-status:
+    if: ${{ always() }}
+    needs: [notify, call-gerrit-rtdv3-merge]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get workflow conclusion
+        # yamllint disable-line rule:line-length
+        uses: im-open/workflow-conclusion@fce18569e28a9f2ed1feca1e6d4251e6a7365fdc  # v2.2.4
+      - name: Report workflow conclusion
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/gerrit-review-action@b26a98041c59f9a877048c320313ab13bcc19aae  # v1.0.1
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
+          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: ${{ env.WORKFLOW_CONCLUSION }}
+          comment-only: true
