@@ -1,0 +1,8 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+2: Anil Belur <abelur@linuxfoundation.org>
+Verified+1: o-ran-sc release <collab-it+o-ran-sc-release@linuxfoundation.org>
+Submitted-by: Anil Belur <abelur@linuxfoundation.org>
+Submitted-at: Tue, 14 Apr 2026 12:25:31 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/.github/+/15535
+Project: .github
+Branch: refs/heads/main
