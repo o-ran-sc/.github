@@ -1,5 +1,5 @@
 ---
-name: Gerrit Required Change Isolation Verify
+name: Gerrit Required Bypassable Verify
 
 # yamllint disable-line rule:truthy
 on:
@@ -49,9 +49,13 @@ on:
 
 concurrency:
   # yamllint disable-line rule:line-length
-  group: required-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_BRANCH }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
+  group: required-bypassable-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_BRANCH }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
   cancel-in-progress: true
 
+# Votes as the bypassable identity. The submit requirement only counts this
+# account rather than naming it, so a failing check here can be stripped by a
+# committer to unblock a change. Suited to checks that fail for reasons outside
+# the authors control, such as documentation link checking.
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -61,8 +65,8 @@ jobs:
         uses: lfreleng-actions/gerrit-review-action@a1c036a59b94c8ab89de26d378f6a28cc7378b13  # v1.1.2
         with:
           host: ${{ vars.GERRIT_SERVER }}
-          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
-          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          username: ${{ vars.GERRIT_SSH_BYPASSABLE_USER }}
+          key: ${{ secrets.GERRIT_SSH_BYPASSABLE_PRIVKEY }}
           known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
@@ -70,10 +74,10 @@ jobs:
       - name: Allow replication
         run: sleep 10s
 
-  change-isolation-verify:
+  rtd-validation:
     needs: prepare
     # yamllint disable-line rule:line-length
-    uses: lfit/releng-reusable-workflows/.github/workflows/gerrit-compose-required-change-isolation-verify.yaml@5fa62e396473e823e2bb0f45b744e94c4f842faa  # v0.7.4
+    uses: lfit/releng-reusable-workflows/.github/workflows/gerrit-compose-required-rtdv3-verify.yaml@37bbdea5cca2f21e502f7ff580306c78307d1d41  # v0.3.1
     with:
       GERRIT_BRANCH: ${{ inputs.GERRIT_BRANCH }}
       GERRIT_CHANGE_ID: ${{ inputs.GERRIT_CHANGE_ID }}
@@ -85,10 +89,12 @@ jobs:
       GERRIT_PROJECT: ${{ inputs.GERRIT_PROJECT }}
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
       TARGET_REPO: ${{ inputs.TARGET_REPO }}
+    secrets:
+      RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
 
   vote:
     if: ${{ always() }}
-    needs: [prepare, change-isolation-verify]
+    needs: [prepare, rtd-validation]
     runs-on: ubuntu-latest
     steps:
       # yamllint disable-line rule:line-length
@@ -98,8 +104,8 @@ jobs:
         uses: lfreleng-actions/gerrit-review-action@a1c036a59b94c8ab89de26d378f6a28cc7378b13  # v1.1.2
         with:
           host: ${{ vars.GERRIT_SERVER }}
-          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
-          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          username: ${{ vars.GERRIT_SSH_BYPASSABLE_USER }}
+          key: ${{ secrets.GERRIT_SSH_BYPASSABLE_PRIVKEY }}
           known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
