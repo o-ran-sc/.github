@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62343e6_05a293fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-03T12:45:26Z",
+      "side": 1,
+      "message": "Absolutely not. The change isolation job is _the_ required job. Any other \"required\" jobs _must_ move to a different user account if they are expected to vote separately.",
+      "revId": "e3843fa70fe5697f45c4d76bcfeabbec5fd79543",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
