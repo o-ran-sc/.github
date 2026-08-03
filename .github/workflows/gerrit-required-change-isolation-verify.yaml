@@ -52,6 +52,10 @@ concurrency:
   group: required-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_BRANCH }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
   cancel-in-progress: true
 
+# Gerrit stores one value per account per label, so two required workflows
+# voting as the same account overwrite one another. This workflow therefore
+# uses the second required-workflow identity, named BYPASSABLE to stay
+# consistent with the equivalent slot in other LF projects.
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -61,8 +65,8 @@ jobs:
         uses: lfreleng-actions/gerrit-review-action@a1c036a59b94c8ab89de26d378f6a28cc7378b13  # v1.1.2
         with:
           host: ${{ vars.GERRIT_SERVER }}
-          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
-          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          username: ${{ vars.GERRIT_SSH_BYPASSABLE_USER }}
+          key: ${{ secrets.GERRIT_SSH_BYPASSABLE_PRIVKEY }}
           known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
@@ -98,8 +102,8 @@ jobs:
         uses: lfreleng-actions/gerrit-review-action@a1c036a59b94c8ab89de26d378f6a28cc7378b13  # v1.1.2
         with:
           host: ${{ vars.GERRIT_SERVER }}
-          username: ${{ vars.GERRIT_SSH_REQUIRED_USER }}
-          key: ${{ secrets.GERRIT_SSH_REQUIRED_PRIVKEY }}
+          username: ${{ vars.GERRIT_SSH_BYPASSABLE_USER }}
+          key: ${{ secrets.GERRIT_SSH_BYPASSABLE_PRIVKEY }}
           known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
